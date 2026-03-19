@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,900;1,9..144,700&display=swap');
+
+:root {
+  --navy: #050A1A;
+  --navy2: #080F26;
+  --navy3: #0C1535;
+  --card-bg: #0A1128;
+  --gold: #C8922A;
+  --gold-lt: #F0B84A;
+  --gold-pale: rgba(200,146,42,0.12);
+  --orange: #E8621A;
+  --orange-lt: #FF7A35;
+  --white: #F5F2EC;
+  --dim: rgba(245,242,236,0.6);
+  --dim2: rgba(245,242,236,0.38);
+  --rule: rgba(200,146,42,0.22);
+  --rule2: rgba(200,146,42,0.1);
+  --transition-fast: 150ms cubic-bezier(0.4,0,0.2,1);
+  --transition-base: 250ms cubic-bezier(0.4,0,0.2,1);
+
+  /* Readable font scale — was tiny 7-9px inline styles */
+  --fs-tag:   0.6875rem; /* 11px */
+  --fs-label: 0.75rem;   /* 12px */
+  --fs-sm:    0.8125rem; /* 13px */
+  --fs-base:  0.9375rem; /* 15px */
+  --fs-md:    1rem;      /* 16px */
+  --fs-lg:    1.125rem;  /* 18px */
+  --fs-xl:    1.375rem;  /* 22px */
+  --fs-2xl:   1.75rem;   /* 28px */
+  --fs-3xl:   2.25rem;   /* 36px */
+  --fs-4xl:   3rem;      /* 48px */
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 16px;
+}
+
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background: var(--navy);
+  color: var(--white);
+  overflow-x: hidden;
+  min-height: 100vh;
+  font-size: var(--fs-base);
+  line-height: 1.65;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 40% at 50% -5%, rgba(200,146,42,.09) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 50% at 5%  50%, rgba(232,98,26,.05)  0%, transparent 60%),
+    radial-gradient(ellipse 35% 40% at 95% 70%, rgba(200,146,42,.04) 0%, transparent 55%);
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--navy); }
+::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold-lt); }
+
+h1,h2,h3,h4,h5,h6 { font-weight: 700; line-height: 1.2; }
+h1 { font-size: clamp(1.75rem, 5vw, 3.25rem); }
+h2 { font-size: clamp(1.375rem, 3.5vw, 2rem); }
+h3 { font-size: clamp(1.125rem, 2.5vw, 1.5rem); }
+p  { line-height: 1.7; font-size: var(--fs-base); }
+
+a { color: var(--gold); text-decoration: none; transition: color var(--transition-fast); }
+a:hover { color: var(--gold-lt); }
+
+input, textarea, select {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: var(--fs-base);
+  background: rgba(255,255,255,.05);
+  color: var(--white);
+  border: 1px solid var(--rule);
+  padding: 0.625rem 0.875rem;
+  border-radius: 2px;
+  transition: all var(--transition-fast);
+  width: 100%;
+}
+input::placeholder, textarea::placeholder { color: var(--dim2); }
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  background: rgba(255,255,255,.08);
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(200,146,42,.12);
+}
+select option { background: var(--navy2); color: var(--white); }
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(20px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes pulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50%     { opacity:.3; transform:scale(.8); }
+}
+@keyframes spin {
+  from { transform:rotate(0deg); }
+  to   { transform:rotate(360deg); }
+}
+
+.fade-up { animation: fadeUp 0.5s ease-out both; }
+
+/* Page horizontal padding — responsive */
+.px-page {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+@media (min-width: 640px)  { .px-page { padding-left: 2rem;  padding-right: 2rem;  } }
+@media (min-width: 1024px) { .px-page { padding-left: 3rem;  padding-right: 3rem;  } }
+
+/* Overflow-safe table wrapper */
+.table-wrap { width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+
+/* Responsive 2-col grid */
+.grid-2 { display:grid; grid-template-columns:1fr; gap:1rem; }
+@media (min-width:600px) { .grid-2 { grid-template-columns:1fr 1fr; } }
+
+/* Responsive 3-col grid */
+.grid-3 { display:grid; grid-template-columns:1fr; gap:1rem; }
+@media (min-width:600px) { .grid-3 { grid-template-columns:1fr 1fr; } }
+@media (min-width:900px) { .grid-3 { grid-template-columns:1fr 1fr 1fr; } }
+
+/* ── Table wrap for horizontal scroll on mobile ─────────────────────────── */
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--rule2);
+}
+
+/* ── Grid helpers ────────────────────────────────────────────────────────── */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+@media(min-width: 640px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+
+/* ── Fade up animation ───────────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ── Pulse animation (used in ticker + loaders) ─────────────────────────── */
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: .4; transform: scale(.85); }
+}
+
+/* ── News body typography ───────────────────────────────────────────────── */
+.news-body { font-size: 1.0625rem; line-height: 1.8; color: var(--dim); }
