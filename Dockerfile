@@ -15,27 +15,26 @@ RUN npm run build
 # ── Stage 2: Production image ────────────────────────────────────────────────
 FROM node:20-alpine AS production
 
-RUN apk add --no-cache python3 make g++
+RUN apk add --no-cache python3 make g++ sqlite
 
 WORKDIR /app
 
 # Install only production dependencies
-# (better-sqlite3 needs native build tools)
 COPY package.json package-lock.json* ./
 RUN npm install --omit=dev
 
 # Copy built frontend from builder
 COPY --from=builder /app/dist ./dist
 
-# Copy server + seed
+# Copy server + seed (schema only)
 COPY server.ts ./
 COPY seed.ts ./
 COPY tsconfig.json ./
 
-# tsx runs TypeScript directly — install globally for prod use
+# tsx runs TypeScript directly
 RUN npm install -g tsx
 
-# Create persistent directory for SQLite database
+# Create persistent directories
 RUN mkdir -p /app/data /app/uploads/covers /app/uploads/pdfs
 
 ENV NODE_ENV=production
@@ -46,6 +45,5 @@ EXPOSE 5174
 HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
   CMD wget -qO- http://localhost:5174/health || exit 1
 
-# Seed DB (idempotent), then start server
-# server.ts serves dist/ as static files in production mode
+# Run schema migration then start server
 CMD sh -c "tsx seed.ts && tsx server.ts"
